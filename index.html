@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cabine de Fotos | Kina Tech</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Space+Grotesk:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="k" viewBox="0 0 100 100"><rect x="8" y="8" width="20" height="84" rx="2" style="fill:var(--k)"/><path d="M92 8H62L36 40l14 10 14-13z" fill="#ff1f1f"/><path d="M92 92H62L36 60l14-10 14 13z" fill="#ff1f1f"/><circle cx="40" cy="50" r="8" fill="#ff1f1f"/></symbol></svg>
+<div class="brand"><svg><use href="#k"/></svg>Kina Tech</div>
+
+<section class="screen on" id="s-inicio">
+  <h1>Registre esse momento!</h1>
+  <p>Três fotos, uma tira para guardar e compartilhar.</p>
+  <button class="primary" id="comecar">Clique aqui</button>
+</section>
+
+<section class="screen" id="s-modo">
+  <h2>Monte sua tira</h2>
+  <p>Escolha como quer usar nosso template.</p>
+  <div class="cards">
+    <button class="card" id="modo-cam"><b>Tirar foto</b><span>Tire 3 fotos agora</span></button>
+    <button class="card" id="modo-gal"><b>Selecionar da galeria</b><span>Selecione 3 fotos</span></button>
+  </div>
+  <input type="file" id="file" accept="image/*" multiple hidden>
+  <p id="aviso" role="alert" style="color:var(--red)"></p>
+</section>
+
+<section class="screen" id="s-montar">
+  <div class="mount">
+    <div>
+      <div class="view" id="view">
+        <video id="video" playsinline muted></video>
+        <div id="count"></div><div id="flash"></div>
+      </div>
+      <div class="thumbs" id="thumbs"><div>1</div><div>2</div><div>3</div></div>
+    </div>
+    <div class="opts">
+      <div><h3>Filtro</h3><div class="chips" id="chipsF">
+        <button class="chip" data-f="" aria-pressed="true">Sem filtro</button>
+        <button class="chip" data-f="sepia" aria-pressed="false">Sépia</button>
+        <button class="chip" data-f="bw" aria-pressed="false">P&amp;B</button></div></div>
+      <div><h3>Tira</h3><div class="chips" id="chipsT">
+        <button class="chip" data-t="light" aria-pressed="true">Clara</button>
+        <button class="chip" data-t="dark" aria-pressed="false">Escura</button></div></div>
+      <div><h3>Legenda</h3><input type="text" id="cap" value="Meu momento no evento" maxlength="34" aria-label="Legenda da tira"></div>
+      <button class="primary" id="go">Tirar 3 fotos</button>
+      <p class="hint" id="dica">ou aperte a barra de espaço</p>
+      <button class="ghost" id="voltar">Voltar</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="s-proc">
+  <div class="spin" aria-hidden="true"></div>
+  <h2>Montando suas fotos...</h2>
+  <p>Leva só alguns segundos.</p>
+</section>
+
+<section class="screen" id="s-pronto">
+  <h2>Suas fotos estão prontas!</h2>
+  <img id="out" alt="Tira vertical com suas três fotos">
+  <div class="qrbox" id="qrbox" hidden><div id="qr"></div><ol><li>Abra a câmera do celular</li><li>Aponte para o QR code</li><li>Salve suas fotos e compartilhe</li></ol><input type="text" id="lnk" readonly aria-label="Link da foto"><button class="cp" id="cplink">Copiar link</button></div>
+  <div id="mailrow" hidden><input type="email" id="mail" placeholder="email para receber as fotos" aria-label="Email para receber as fotos"><button class="primary" id="mailgo">Criar email</button></div>
+  <p id="smsg" role="status"></p>
+  <ol class="steps"><li>Pressione e segure a imagem (ou clique com o botão direito)</li><li>Escolha salvar imagem</li><li>Compartilhe e marque a gente</li></ol>
+  <div class="row">
+    <button class="primary" id="qrbtn">Gerar QR code</button>
+    <button class="primary" id="mailbtn">Enviar por email</button>
+    <button class="ghost" id="share" hidden>Compartilhar</button>
+    <button class="ghost" id="refazer">Tirar de novo</button>
+    <button class="ghost" id="fim">Terminei</button>
+  </div>
+</section>
+
+<section class="screen" id="s-errcam">
+  <h2>Não conseguimos abrir a câmera</h2>
+  <p>Confira se você permitiu o acesso à câmera para este site. Se preferir, use fotos da sua galeria.</p>
+  <div class="row"><button class="primary" id="re-cam">Tentar de novo</button><button class="ghost" id="re-gal">Usar fotos da galeria</button></div>
+</section>
+
+<section class="screen" id="s-err">
+  <h2>Não conseguimos montar sua tira</h2>
+  <p>Suas fotos continuam guardadas neste aparelho. Tente de novo.</p>
+  <div class="row"><button class="primary" id="re-gerar">Tentar de novo</button><button class="ghost" id="re-ini">Voltar ao início</button></div>
+</section>
+
+<script src="js/vendor/qrcode.js"></script>
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
