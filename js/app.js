@@ -7,10 +7,13 @@
   function clearResultUrl(){if(resultUrl){URL.revokeObjectURL(resultUrl);resultUrl=null;}}
   function resetShare(){linkP=null;$('qrbox').hidden=true;$('mailrow').hidden=true;$('smsg').textContent='';}
   function reset(){resetShare();clearResultUrl();stop();shots=[];busy=false;thumbs();$('out').removeAttribute('src');show('s-inicio');}
+  function createThumbUrl(canvas){
+    try{return canvas.toDataURL('image/jpeg',.85);}catch(e){return '';}
+  }
   function thumbs(){
     var t=$('thumbs');t.innerHTML='';
     for(var i=0;i<3;i++){var d=document.createElement('div');
-      if(shots[i]){var im=document.createElement('img');if(!shots[i].__thumbUrl){shots[i].__thumbUrl=shots[i].toDataURL('image/jpeg',.85);}im.src=shots[i].__thumbUrl;im.alt='Foto '+(i+1);d.appendChild(im);}else d.textContent=i+1;
+      if(shots[i]){var im=document.createElement('img');im.src=shots[i].__thumbUrl||createThumbUrl(shots[i]);im.alt='Foto '+(i+1);shots[i].__thumbUrl=im.src;d.appendChild(im);}else d.textContent=i+1;
       t.appendChild(d);}
   }
   function fcss(){return filtro==='sepia'?'sepia(.55) contrast(1.05) saturate(1.1)':filtro==='bw'?'grayscale(1) contrast(1.1)':'none';}
@@ -40,11 +43,27 @@
     var s=Math.max(960/w,720/h),sw=960/s,sh=720/s;
     return {c:c,x:x,draw:function(mirror){if(mirror){x.translate(960,0);x.scale(-1,1);}x.drawImage(src,(w-sw)/2,(h-sh)/2,sw,sh,0,0,960,720);return c;}};
   }
+  function fileToCanvas(file){
+    return new Promise(function(resolve,reject){
+      var url=URL.createObjectURL(file),img=new Image();
+      img.onload=function(){
+        try{URL.revokeObjectURL(url);}catch(e){}
+        var w=img.naturalWidth||img.width,h=img.naturalHeight||img.height,maxEdge=1600,scale=Math.min(1,maxEdge/Math.max(w,h));
+        var c=document.createElement('canvas');
+        c.width=Math.max(1,Math.round(w*scale));
+        c.height=Math.max(1,Math.round(h*scale));
+        var x=c.getContext('2d');
+        x.drawImage(img,0,0,c.width,c.height);
+        resolve(c);
+      };
+      img.onerror=function(){try{URL.revokeObjectURL(url);}catch(e){};reject(new Error('Erro ao ler a imagem.'));};
+      img.src=url;
+    });
+  }
   $('file').onchange=function(){
     var fs=Array.prototype.slice.call($('file').files,0,3);
     if(fs.length<3){$('aviso').textContent='Selecione 3 fotos de uma vez para montar a tira.';return;}$('aviso').textContent='';
-    Promise.all(fs.map(function(f){return new Promise(function(res,rej){
-      var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){res(fit(im).draw(false));};im.onerror=rej;im.src=r.result;};r.onerror=rej;r.readAsDataURL(f);});}))
+    Promise.all(fs.map(fileToCanvas))
     .then(function(cs){
       mode='gal';shots=cs;thumbs();$('view').style.display='none';
       $('go').textContent='Montar tira';$('dica').style.display='none';$('go').disabled=false;show('s-montar');prev();
