@@ -1,15 +1,16 @@
 (function(){
   var $=function(i){return document.getElementById(i)};
-  var video=$('video'),stream=null,mode='cam',busy=false,shots=[],filtro='',tema='light',blob=null;
+  var video=$('video'),stream=null,mode='cam',busy=false,shots=[],filtro='',tema='light',blob=null,resultUrl=null;
   var sleep=function(ms){return new Promise(function(r){setTimeout(r,ms)})};
   function show(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('on',s.id===id)});window.scrollTo(0,0);}
   function stop(){if(stream){stream.getTracks().forEach(function(t){t.stop()});stream=null;}}
+  function clearResultUrl(){if(resultUrl){URL.revokeObjectURL(resultUrl);resultUrl=null;}}
   function resetShare(){linkP=null;$('qrbox').hidden=true;$('mailrow').hidden=true;$('smsg').textContent='';}
-  function reset(){resetShare();stop();shots=[];busy=false;thumbs();$('out').removeAttribute('src');show('s-inicio');}
+  function reset(){resetShare();clearResultUrl();stop();shots=[];busy=false;thumbs();$('out').removeAttribute('src');show('s-inicio');}
   function thumbs(){
     var t=$('thumbs');t.innerHTML='';
     for(var i=0;i<3;i++){var d=document.createElement('div');
-      if(shots[i]){var im=document.createElement('img');im.src=shots[i].toDataURL('image/jpeg',.85);im.alt='Foto '+(i+1);d.appendChild(im);}else d.textContent=i+1;
+      if(shots[i]){var im=document.createElement('img');if(!shots[i].__thumbUrl){shots[i].__thumbUrl=shots[i].toDataURL('image/jpeg',.85);}im.src=shots[i].__thumbUrl;im.alt='Foto '+(i+1);d.appendChild(im);}else d.textContent=i+1;
       t.appendChild(d);}
   }
   function fcss(){return filtro==='sepia'?'sepia(.55) contrast(1.05) saturate(1.1)':filtro==='bw'?'grayscale(1) contrast(1.1)':'none';}
@@ -105,9 +106,27 @@
         x.fillStyle='#3a3536';x.fillRect(sx+fa[0]+gp/2-1,cy-32,2,64);
         x.drawImage(lr,sx+fa[0]+gp,cy-fc[1]/2,fc[0],fc[1]);
       }
-      $('out').src=c.toDataURL('image/png');
-      c.toBlob(function(bl){blob=bl;$('share').hidden=!(navigator.canShare&&bl&&navigator.canShare({files:[new File([bl],'tira-kina-tech.png',{type:'image/png'})]}));});
-      show('s-pronto');
+      var createResult=function(imgBlob){
+        blob=imgBlob;
+        if(resultUrl){URL.revokeObjectURL(resultUrl);resultUrl=null;}
+        if(imgBlob && typeof URL !== 'undefined' && URL.createObjectURL){
+          resultUrl=URL.createObjectURL(imgBlob);
+          $('out').src=resultUrl;
+        } else {
+          $('out').src=c.toDataURL('image/png');
+        }
+      };
+      if(c.toBlob){
+        c.toBlob(function(bl){
+          createResult(bl);
+          $('share').hidden=!(navigator.canShare&&bl&&navigator.canShare({files:[new File([bl],'tira-kina-tech.png',{type:'image/png'})]}));
+          show('s-pronto');
+        },'image/png');
+      } else {
+        createResult(null);
+        $('share').hidden=true;
+        show('s-pronto');
+      }
     }catch(e){show('s-err');}
   }
   var linkP=null;
