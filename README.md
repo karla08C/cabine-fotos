@@ -1,13 +1,23 @@
 # Cabine de Fotos Kina Tech — REC'n'Play 2026
 
-Cabine de fotos interativa e responsiva desenvolvida para a **Kina Tech** no evento **REC'n'Play 2026**, combinando uma estética editorial de alta tecnologia inspirada em referências visuais contemporâneas (*Point of View / Reading Stones*) com processamento em tempo real de filtros artísticos e anime.
+Cabine de fotos interativa e responsiva desenvolvida para a **Kina Tech** no evento **REC'n'Play 2026**, combinando uma estética editorial contemporânea inspirada em referências visuais de ponta (*Point of View / Reading Stones*) com processamento em tempo real de filtros artísticos e anime.
+
+---
+
+## 🌐 Acesso em Produção
+
+A aplicação está disponível e pronta para uso em produção no link:
+
+👉 **[https://cabine-fotos-original.vercel.app](https://cabine-fotos-original.vercel.app)**
+
+*(Compatível com smartphones, tablets e computadores, com suporte completo a HTTPS para acesso à câmera WebRTC).*
 
 ---
 
 ## Destaques Visuais e Interativos
 
 1. **Transição em Cortina Vermelha**:
-   - Transição cinematográfica entre telas (`curtain wipe`) com elevação suave que revela a próxima etapa.
+   - Transição cinematográfica entre telas (`curtain wipe`) em tom vermelho Kina Tech que sobe cobrindo a tela e revela a próxima etapa.
 
 2. **Tipografia com Títulos Animados**:
    - Palavras dos títulos sobem uma a uma em cascata com máscaras de corte limpas, criando dinamismo a cada tela.
@@ -16,7 +26,7 @@ Cabine de fotos interativa e responsiva desenvolvida para a **Kina Tech** no eve
    - Faixa contínua no rodapé da tela inicial: `✦ KINA TECH ✦ REC’N’PLAY 2026 ✦ REGISTRE ESSE MOMENTO ✦`.
 
 4. **Holofote e Cursor Magnético (Desktop)**:
-   - Efeito de iluminação vermelha suave seguindo o ponteiro do mouse, anel orbital dinâmico e atração magnética sutil sobre os botões. Desativado automaticamente em telas sensíveis ao toque (smartphones e tablets).
+   - Efeito de iluminação vermelha suave seguindo o ponteiro do mouse, anel orbital dinâmico e atração magnética sutil sobre os botões. Desativado automaticamente em telas touch (smartphones e tablets).
 
 5. **Identidade Visual Kina Tech**:
    - Logo oficial com fundo totalmente transparente (sem caixas ou halos escuros).
@@ -25,7 +35,7 @@ Cabine de fotos interativa e responsiva desenvolvida para a **Kina Tech** no eve
 
 6. **Filtros Fotográficos e Anime**:
    - **Sem filtro**: captura natural de alta nitidez.
-   - **Sépia**: tom nostrófico e quente.
+   - **Sépia**: tom nostálgico e quente.
    - **P&B**: alto contraste clássico.
    - **Anime Cel**: posterização gráfica com contornos de tinta preta (*cel shading*).
    - **Ghibli**: paleta suave, aquarelada e iluminada.
@@ -41,7 +51,7 @@ Cabine de fotos interativa e responsiva desenvolvida para a **Kina Tech** no eve
 
 ---
 
-## Como Executar
+## Como Executar Localmente
 
 Por requisitos de segurança do navegador para acesso à câmera WebRTC:
 
