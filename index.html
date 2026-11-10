@@ -8,56 +8,166 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="k" viewBox="0 0 100 100"><rect x="8" y="8" width="20" height="84" rx="2" style="fill:var(--k)"/><path d="M92 8H62[...]
+
+<!-- CORTINA VERMELHA: Transição entre telas -->
+<div class="red-curtain" id="curtain" aria-hidden="true"></div>
+
+<!-- HOLOFOTE E CURSOR SEGUIDOR (Computador apenas) -->
+<div class="mouse-spotlight" id="spotlight" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="k" viewBox="0 0 100 100"><rect x="8" y="8" width="20" height="84" rx="2" style="fill:var(--k)"/><path d="M92 8H62L36 40l14 10 14-13z" fill="#ff1f1f"/><path d="M92 92H62L36 60l14-10 14 13z" fill="#ff1f1f"/><circle cx="40" cy="50" r="8" fill="#ff1f1f"/></symbol></svg>
 <div class="brand"><svg><use href="#k"/></svg>Kina Tech</div>
 
+<!-- TELA 1: Início -->
 <section class="screen on" id="s-inicio">
-  <h1>Hora da foto 📸  !</h1>
-  <p>Registre esse momento especial</p>
-  <button class="primary" id="comecar">Clique aqui</button>
-</section>
-
-<section class="screen" id="s-modo">
-  <h2>Monte sua tira</h2>
-  <p>Escolha como quer usar nosso template.</p>
-  <div class="cards">
-    <button class="card" id="modo-cam"><b>Tirar foto</b><span>Tire 3 fotos agora</span></button>
-    <button class="card" id="modo-gal"><b>Selecionar da galeria</b><span>Selecione 3 fotos</span></button>
+  <div class="hero-logos-combo">
+    <img src="assets/logo-kina-tech.png" alt="Kina Tech" class="hero-logo-k">
+    <div class="hero-divider"></div>
+    <img src="assets/logo-recnplay-2026.png" alt="REC'n'Play 2026" class="hero-logo-r">
+  </div>
+  <h1 class="split-title">Registre esse momento!</h1>
+  <p>Três fotos, uma tira para guardar e compartilhar.</p>
+  
+  <div class="hero-actions">
+    <button class="primary hero-btn" id="comecar">Clique aqui</button>
+    <button class="btn-sub-small" id="btn-gal-small">Enviar foto</button>
   </div>
   <input type="file" id="file" accept="image/*" multiple hidden>
   <p id="aviso" role="alert" style="color:var(--red)"></p>
 </section>
 
+<!-- TELA 2: Modo de Montagem (Câmera ou Galeria) -->
+<section class="screen" id="s-modo">
+  <h2 class="split-title">Monte sua tira</h2>
+  <p>Escolha como quer usar nosso template.</p>
+  <div class="cards">
+    <button class="card" id="modo-cam"><b>Câmera</b><span>Tire 3 fotos agora</span></button>
+    <button class="card" id="modo-gal"><b>Galeria</b><span>Selecione 3 fotos</span></button>
+  </div>
+  <button class="ghost" id="modo-voltar" style="margin-top:10px">Voltar ao início</button>
+</section>
+
+<!-- TELA 3: Montagem (Visor, Filtros, Tema e Legenda) -->
 <section class="screen" id="s-montar">
   <div class="mount">
-    <div><div class="view" id="view"><video id="video" playsinline muted></video><div id="count"></div><div id="flash"></div></div><div class="thumbs" id="thumbs"><div>1</div><div>2</div><div>3</div></div></div>
+    <div>
+      <div class="view" id="view">
+        <video id="video" playsinline muted autoplay></video>
+        <div id="count"></div><div id="flash"></div>
+        <button class="cam-flip-btn" id="cam-flip" title="Trocar câmera" aria-label="Trocar câmera">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0-4.4-3.6-8-8-8s-8 3.6-8 8"/><path d="M4 14c0 4.4 3.6 8 8 8s8-3.6 8-8"/><path d="m7 7-3 3-3-3"/><path d="m17 17 3-3 3 3"/></svg>
+        </button>
+      </div>
+      <div class="thumbs" id="thumbs"><div>1</div><div>2</div><div>3</div></div>
+    </div>
     <div class="opts">
-      <div><h3>Filtro</h3><div class="chips" id="chipsF"><button class="chip" data-f="" aria-pressed="true">Sem filtro</button><button class="chip" data-f="sepia" aria-pressed="false">Sépia</button><button class="chip" data-f="bw" aria-pressed="false">P&amp;B</button></div></div>
-      <div><h3>Tira</h3><div class="chips" id="chipsT"><button class="chip" data-t="light" aria-pressed="true">Clara</button><button class="chip" data-t="dark" aria-pressed="false">Escura</button></div></div>
-      <div><h3>Legenda</h3><input type="text" id="cap" value="Meu momento no evento" maxlength="34" aria-label="Legenda da tira"></div>
-      <button class="primary" id="go">Tirar 3 fotos</button><p class="hint" id="dica">ou aperte a barra de espaço</p><button class="ghost" id="voltar">Voltar</button>
+      <div>
+        <h3>Filtro</h3>
+        <div class="chips" id="chipsF">
+          <!-- Filtros Originais -->
+          <button class="chip" data-f="" aria-pressed="true">Sem filtro</button>
+          <button class="chip" data-f="sepia" aria-pressed="false">Sépia</button>
+          <button class="chip" data-f="bw" aria-pressed="false">P&amp;B</button>
+          <!-- Filtros Especiais de Anime -->
+          <button class="chip" data-f="anime-cel" aria-pressed="false">Anime Cel</button>
+          <button class="chip" data-f="anime-ghibli" aria-pressed="false">Ghibli</button>
+          <button class="chip" data-f="anime-shinkai" aria-pressed="false">Shinkai</button>
+          <button class="chip" data-f="anime-manga" aria-pressed="false">Mangá</button>
+          <button class="chip" data-f="anime-kawaii" aria-pressed="false">Kawaii</button>
+        </div>
+      </div>
+      <div>
+        <h3>Tira</h3>
+        <div class="chips" id="chipsT">
+          <button class="chip" data-t="light" aria-pressed="true">Clara</button>
+          <button class="chip" data-t="dark" aria-pressed="false">Escura</button>
+          <button class="chip" data-t="cyber" aria-pressed="false">Cyber</button>
+        </div>
+      </div>
+      <div>
+        <h3>Legenda</h3>
+        <input type="text" id="cap" value="Meu momento no evento" maxlength="34" aria-label="Legenda da tira">
+      </div>
+      <button class="primary" id="go">Tirar 3 fotos</button>
+      <p class="hint" id="dica">ou aperte a barra de espaço</p>
+      <button class="ghost" id="voltar">Voltar</button>
     </div>
   </div>
 </section>
 
-<section class="screen" id="s-proc"><div class="spin" aria-hidden="true"></div><h2>Montando suas fotos...</h2><p>Leva só alguns segundos.</p></section>
-
-<section class="screen" id="s-pronto">
-  <h2>Suas fotos estão prontas!</h2><img id="out" alt="Tira vertical com suas três fotos">
-  <div class="qrbox" id="qrbox" hidden><div id="qr"></div><ol><li>Abra a câmera do celular</li><li>Aponte para o QR code</li><li>Salve suas fotos e compartilhe</li></ol><input type="text" id="lnk" readonly aria-label="Link para as fotos"><button class="cp" id="cplink">Copiar link</button></div>
-  <div id="mailrow" hidden><input type="email" id="mail" placeholder="email para receber as fotos" aria-label="Email para receber as fotos"><button class="primary" id="mailgo">Criar email</button></div>
-  <p id="smsg" role="status"></p><ol class="steps"><li>Pressione e segure a imagem (ou clique com o botão direito)</li><li>Escolha salvar imagem</li><li>Compartilhe e marque a gente</li></ol>
-  <div class="row"><button class="primary" id="qrbtn">Gerar QR code</button><button class="primary" id="mailbtn">Enviar por email</button><button class="ghost" id="share" hidden>Compartilhar</button><button class="ghost" id="refazer">Tirar de novo</button><button class="ghost" id="fim">Terminei</button></div>
+<!-- TELA 4: Processamento -->
+<section class="screen" id="s-proc">
+  <div class="spin" aria-hidden="true"></div>
+  <h2 class="split-title">Montando suas fotos...</h2>
+  <p>Leva só alguns segundos.</p>
 </section>
-<section class="screen" id="s-errcam"><h2>Não conseguimos abrir a câmera</h2><p>Confira se você permitiu o acesso à câmera para este site. Se preferir, use fotos da sua galeria.</p><div class="row"><button class="primary" id="re-cam">Tentar de novo</button><button class="ghost" id="re-gal">Usar fotos da galeria</button></div></section>
-<section class="screen" id="s-err"><h2>Não conseguimos montar sua tira</h2><p>Suas fotos continuam guardadas neste aparelho. Tente de novo.</p><div class="row"><button class="primary" id="re-gerar">Tentar de novo</button><button class="ghost" id="re-ini">Voltar ao início</button></div></section>
+
+<!-- TELA 5: Pronto (Download, QR Code, Email, Compartilhamento) -->
+<section class="screen" id="s-pronto">
+  <h2 class="split-title">Suas fotos estão prontas!</h2>
+  <img id="out" alt="Tira vertical com suas três fotos">
+  
+  <div class="qrbox" id="qrbox" hidden>
+    <div id="qr"></div>
+    <ol>
+      <li>Abra a câmera do celular</li>
+      <li>Aponte para o QR code</li>
+      <li>Salve suas fotos e compartilhe</li>
+    </ol>
+    <div class="linkrow">
+      <input type="text" id="lnk" readonly aria-label="Link da foto">
+      <button class="cp" id="cplink">Copiar link</button>
+    </div>
+  </div>
+  
+  <div id="mailrow" hidden>
+    <input type="email" id="mail" placeholder="email para receber as fotos" aria-label="Email para receber as fotos">
+    <button class="primary" id="mailgo">Criar email</button>
+  </div>
+  
+  <p id="smsg" role="status"></p>
+  
+  <ol class="steps">
+    <li>Pressione e segure a imagem (ou use o botão Baixar imagem)</li>
+    <li>Escaneie o QR code para acessar no seu celular</li>
+    <li>Compartilhe e marque @kinatech e #RecnPlay2026</li>
+  </ol>
+  
+  <div class="row">
+    <button class="primary" id="downbtn">Baixar imagem</button>
+    <button class="primary" id="qrbtn">Gerar QR code</button>
+    <button class="primary" id="mailbtn">Enviar por email</button>
+    <button class="ghost" id="share" hidden>Compartilhar</button>
+    <button class="ghost" id="refazer">Tirar de novo</button>
+    <button class="ghost" id="fim">Terminei</button>
+  </div>
+</section>
+
+<!-- TELA DE ERRO: Câmera -->
+<section class="screen" id="s-errcam">
+  <h2>Não conseguimos abrir a câmera</h2>
+  <p>Confira se você permitiu o acesso à câmera para este site. Se preferir, use fotos da sua galeria.</p>
+  <div class="row"><button class="primary" id="re-cam">Tentar de novo</button><button class="ghost" id="re-gal">Usar fotos da galeria</button></div>
+</section>
+
+<!-- TELA DE ERRO: Montagem -->
+<section class="screen" id="s-err">
+  <h2>Não conseguimos montar sua tira</h2>
+  <p>Suas fotos continuam guardadas neste aparelho. Tente de novo.</p>
+  <div class="row"><button class="primary" id="re-gerar">Tentar de novo</button><button class="ghost" id="re-ini">Voltar ao início</button></div>
+</section>
+
+<!-- FAIXA EM MOVIMENTO (TICKER): Apenas na tela inicial com "KINA TECH, REC'N'PLAY 2026, REGISTRE ESSE MOMENTO" -->
+<aside class="ticker-bar" aria-hidden="true">
+  <div class="ticker-inner">
+    <div class="ticker-item">✦ KINA TECH ✦ REC’N’PLAY 2026 ✦ REGISTRE ESSE MOMENTO ✦ KINA TECH ✦ REC’N’PLAY 2026 ✦ REGISTRE ESSE MOMENTO ✦ KINA TECH ✦ REC’N’PLAY 2026 ✦ REGISTRE ESSE MOMENTO ✦</div>
+    <div class="ticker-item">✦ KINA TECH ✦ REC’N’PLAY 2026 ✦ REGISTRE ESSE MOMENTO ✦ KINA TECH ✦ REC’N’PLAY 2026 ✦ REGISTRE ESSE MOMENTO ✦ KINA TECH ✦ REC’N’PLAY 2026 ✦ REGISTRE ESSE MOMENTO ✦</div>
+  </div>
+</aside>
 
 <script src="js/vendor/qrcode.js"></script>
 <script src="js/config.js"></script>
-<script src="js/camera.js"></script>
-<script src="js/gallery.js"></script>
-<script src="js/render.js"></script>
-<script src="js/share.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

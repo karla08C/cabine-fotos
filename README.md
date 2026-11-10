@@ -1,90 +1,63 @@
-# Cabine de fotos Kina Tech
+# Cabine de Fotos Kina Tech — REC'n'Play 2026
 
-Cabine de fotos para eventos: a pessoa tira 3 fotos na hora (ou escolhe da galeria),
-escolhe filtro e tema da tira, e recebe uma tira vertical com legenda e as logos
-da Kina Tech e da REC'n'Play 2026.
+Cabine de fotos interativa e responsiva desenvolvida para a **Kina Tech** no evento **REC'n'Play 2026**, combinando uma estética editorial de alta tecnologia inspirada em referências visuais contemporâneas (*Point of View / Reading Stones*) com processamento em tempo real de filtros artísticos e anime.
 
-## Como rodar
+---
 
-A câmera só funciona em `https` ou `localhost`, e a imagem final só é gerada se
-os arquivos vierem de um servidor (não abra o `index.html` com duplo clique).
+## Destaques Visuais e Interativos
+
+1. **Transição em Cortina Vermelha**:
+   - Transição cinematográfica entre telas (`curtain wipe`) com elevação suave que revela a próxima etapa.
+
+2. **Tipografia com Títulos Animados**:
+   - Palavras dos títulos sobem uma a uma em cascata com máscaras de corte limpas, criando dinamismo a cada tela.
+
+3. **Faixa em Movimento (Ticker Marquee)**:
+   - Faixa contínua no rodapé da tela inicial: `✦ KINA TECH ✦ REC’N’PLAY 2026 ✦ REGISTRE ESSE MOMENTO ✦`.
+
+4. **Holofote e Cursor Magnético (Desktop)**:
+   - Efeito de iluminação vermelha suave seguindo o ponteiro do mouse, anel orbital dinâmico e atração magnética sutil sobre os botões. Desativado automaticamente em telas sensíveis ao toque (smartphones e tablets).
+
+5. **Identidade Visual Kina Tech**:
+   - Logo oficial com fundo totalmente transparente (sem caixas ou halos escuros).
+   - Tipografia limpa, minimalista e sem emojis para um visual moderno e corporativo.
+   - Botão secundário de envio de fotos discreto e compacto.
+
+6. **Filtros Fotográficos e Anime**:
+   - **Sem filtro**: captura natural de alta nitidez.
+   - **Sépia**: tom nostrófico e quente.
+   - **P&B**: alto contraste clássico.
+   - **Anime Cel**: posterização gráfica com contornos de tinta preta (*cel shading*).
+   - **Ghibli**: paleta suave, aquarelada e iluminada.
+   - **Shinkai**: saturação profunda, céu azul vívido e iluminação cinematográfica.
+   - **Mangá**: estética gráfica em preto e branco com meio-tom (*screentone*).
+   - **Kawaii**: realce suave de iluminação com blush e brilho cintilante.
+
+7. **Lupa Óptica & Entrega da Foto**:
+   - Lupa de aumento interativa (*Reading Stone Loupe*) para inspeção tátil dos detalhes da foto.
+   - Download direto da tira em alta resolução (.png).
+   - Gerador de QR Code instantâneo para salvar a foto no smartphone.
+   - Envio facilitado por email e compartilhamento nativo.
+
+---
+
+## Como Executar
+
+Por requisitos de segurança do navegador para acesso à câmera WebRTC:
 
 ```bash
-python3 -m http.server 8000
-# abra http://localhost:8000
+# Na pasta do projeto:
+python -m http.server 8000
 ```
 
-## Estrutura
+Abra no navegador: `http://localhost:8000`
 
-- `index.html`: telas do fluxo (início, modo, montagem, processamento, pronto, erros)
-- `css/style.css`: estilos
-- `js/app.js`: câmera, contagem, geração da tira em canvas, QR code e email
-- `js/config.js`: função de envio da foto (`window.KINA_UPLOAD`)
-- `js/vendor/qrcode.js`: qrcode-generator 1.4.4 (MIT)
-- `assets/`: logos usadas no rodapé da tira
+---
 
-## Fluxo da aplicação
+## Estrutura do Projeto
 
-1. A pessoa entra na cabine e escolhe entre câmera ou galeria.
-2. Seleciona 3 fotos (ou tira 3 na hora com a câmera).
-3. Ajusta filtro e tema da tira.
-4. Adiciona uma legenda.
-5. A aplicação monta uma composição vertical em canvas.
-6. O usuário pode salvar a imagem, gerar QR code ou enviar por email.
-
-## QR code e email
-
-O QR code e o email precisam de um link público para a foto. Isso exige um lugar
-para hospedar a imagem. Implemente `window.KINA_UPLOAD` em `js/config.js`
-(Cloudinary, Supabase Storage, S3, Google Drive ou um endpoint próprio).
-
-```javascript
-window.KINA_UPLOAD = async function (blob) {
-  const form = new FormData();
-  form.append('file', blob, 'tira-kina-tech.png');
-
-  const res = await fetch('https://SEU-ENDPOINT/upload', {
-    method: 'POST',
-    body: form
-  });
-
-  if (!res.ok) throw new Error('falha no envio (' + res.status + ')');
-
-  const data = await res.json();
-  return data.url;
-};
-```
-
-O email abre o aplicativo de email do aparelho com o link no corpo da mensagem;
-o envio automático exigiria um servidor.
-
-## Otimizações aplicadas
-
-Este projeto foi ajustado para trabalhar de forma mais eficiente, especialmente em
-smartphones e dispositivos com menos memória:
-
-- miniaturas reutilizam a imagem gerada em vez de converter repetidamente em JPEG
-- a imagem final é salva em `Blob` e exibida via `URL.createObjectURL()` para reduzir
-  uso de memória e processamento desnecessário
-- imagens da galeria são redimensionadas antes do processamento para reduzir o peso de
-  memória em telas com fotos grandes
-- objetos temporários e URLs geradas são limpos ao reiniciar o processo para evitar
-  vazamentos e acúmulo de uso de RAM
-
-## Próximos passos
-
-- Hospedar as fotos e preencher `js/config.js`
-- Publicar no GitHub Pages (Settings > Pages)
-- Trocar a legenda padrão e o nome do evento
-- Validar o fluxo em iPhones e Androids com diferentes tamanhos de tela
-- Adicionar testes básicos de regressão e verificar o comportamento em navegadores
-  mais antigos
-
-## Observações de produção
-
-- O app depende de `navigator.mediaDevices.getUserMedia()` para tirar fotos pela câmera.
-- Quando o navegador bloquear a câmera, o fluxo oferece a alternativa de usar a galeria.
-- O processo de montagem da tira usa `canvas`, o que evita depender de um backend para
-  combinar as imagens no cliente.
-- Para um uso mais robusto em produção, vale considerar hospedagem de arquivos e um
-  endpoint para upload e geração de links públicos.
+- `index.html`: Estrutura semântica das telas (Início, Captura, Montagem/Filtros, Processamento, Resultado Final).
+- `css/style.css`: Folha de estilos completa (efeitos de cortina, holofote, animações de texto, responsividade e layout editorial).
+- `js/app.js`: Lógica unificada da câmera, transições, shaders de filtros em canvas, animações de texto, física magnética do cursor, QR code e download.
+- `assets/logo-kina-tech.png`: Logo Kina Tech com transparência alfa pura.
+- `assets/recnplay.png`: Logo oficial REC'n'Play 2026.
